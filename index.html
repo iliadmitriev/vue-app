@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="sample">
+        <input
+                type="text"
+                v-bind:value="name"
+                v-on:input="name = $event.target.value"
+        >
+        <hr>
+        <h2 v-show="showHeader">
+            Hello, {{ name }}!
+        </h2>
+        <button class="btn"
+                v-on:click="showHeader = !showHeader"
+                v-bind:class="btnClass"
+                ref="btnShowHide"
+        >
+            {{ btnText }}
+        </button>
+        <hr>
+        <h2> Ваш доход: {{ totalSum }}</h2>
+        <input type="text" name="number" id="number"
+               v-model="numCaption" placeholder="Название"
+        >
+        <button class="btn btn-success"
+                v-on:click="addLine"
+        >
+            Добавить рандом
+        </button>
+        <ul class="list-group">
+            <li class="list-group-item"
+                v-for="log in logs"
+            >
+                {{log}}
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    const vue = new Vue({
+        el: '.sample',
+        data: {
+            name: `Elia`,
+            showHeader: true,
+            numCaption: null,
+            logs: [],
+            nums: []
+        },
+        /* Methods is called everytime if something changed in template
+        in which these methods is included */
+        methods: {
+            addLine(){
+                const rnd = Math.floor(Math.random() * 11) - 5
+                this.logs.push(`${this.numCaption ? this.numCaption : ''} ${rnd}`)
+                this.nums.push(rnd)
+                this.numCaption = null
+            }
+        },
+        /* Computed properties called only if they values is changed */
+        computed: {
+            totalSum() {
+                return this.nums.reduce((s, i) => s + i, 0)
+            },
+            btnText() {
+                return !this.showHeader ? 'Показать' : 'Скрыть'
+            },
+            btnClass() {
+                return !this.showHeader ? 'btn-primary' : 'btn-danger'
+            }
+
+        }
+    })
+    console.log(vue)
+</script>
+
+</body>
+</html>
